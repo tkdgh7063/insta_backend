@@ -4,9 +4,9 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test": "nodemon --exec babel-node server",
-    "migrate": "npx prisma migrate dev",
-    "studio": "npx prisma studio"
+    "test": "nodemon --exec babel-node server --delay 2s",
+    "studio": "npx prisma studio",
+    "migrate": "npx prisma migrate dev"
   },
   "repository": {
     "type": "git",
@@ -23,18 +23,45 @@
     "@apollo/server": "^4.10.4",
     "@graphql-tools/load-files": "^7.0.0",
     "@graphql-tools/merge": "^9.0.3",
-    "@graphql-tools/schema": "^10.0.3",
-    "@prisma/client": "^5.13.0",
+    "@graphql-tools/schema": "^10.0.4",
+    "@prisma/client": "^5.14.0",
     "apollo-server": "^3.13.0",
+    "apollo-server-core": "^3.13.0",
+    "apollo-server-express": "^3.13.0",
+    "aws-sdk": "^2.1637.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "extract-files": "^13.0.0",
     "graphql": "^15.4.0",
+    "graphql-subscriptions": "^2.0.0",
     "graphql-tools": "^7.0.2",
-    "nodemon": "^3.1.0"
+    "graphql-upload": "^16.0.2",
+    "graphql-ws": "^5.16.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "node": "^20.13.1",
+    "nodemon": "^3.1.0",
+    "npm": "^10.7.0",
+    "react-router-dom": "^5.3.4",
+    "subscriptions-transport-ws": "^0.11.0",
+    "ws": "^8.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",
     "@babel/node": "^7.23.9",
     "@babel/preset-env": "^7.24.4",
-    "prisma": "^5.13.0"
+    "@types/express": "^4.17.21",
+    "@types/graphql-upload": "^16.0.7",
+    "prettier-plugin-prisma": "^5.0.0",
+    "prisma": "^5.14.0"
+  },
+  "exports": {
+    "./GraphQLUpload.js": "./GraphQLUpload.js",
+    "./graphqlUploadExpress.js": "./graphqlUploadExpress.js",
+    "./graphqlUploadKoa.js": "./graphqlUploadKoa.js",
+    "./package.json": "./package.json",
+    "./processRequest.js": "./processRequest.js",
+    "./Upload.js": "./Upload.js"
   }
 }

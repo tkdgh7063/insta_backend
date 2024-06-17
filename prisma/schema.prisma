@@ -4,20 +4,95 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  //phoneNumber String? @unique
+  name      String
+  username  String     @unique
+  password  String
+  bio       String?
+  avatar    String?
+  photos    Photo[]
+  likes     Like[]
+  comments  Comment[]
+  followers User[]     @relation("Follow")
+  following User[]     @relation("Follow")
+  chatrooms ChatRoom[]
+  message   Message[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
-model Movie {
-  id Int @id @default(autoincrement())
-  title String
-  year Int
-  genre String?
+model Photo {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade) // 유저가 사라지면 사진 삭제
+  file      String
+  caption   String?
+  hashtags  Hashtag[]
+  likes     Like[]
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Hashtag {
+  id        Int      @id @default(autoincrement())
+  hashtag   String   @unique
+  photos    Photo[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // 유저가 사라지면 좋아요 삭제
+  userId    Int
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade) // 사진이 사라지면 좋아요 삭제
+  photoId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, photoId])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // 유저가 사라지면 댓글 삭제
+  userId    Int
+  photo     Photo    @relation(fields: [photoId], references: [id], onDelete: Cascade) // 유저가 사라지면 댓글 삭제
+  photoId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChatRoom {
+  id        Int       @id @default(autoincrement())
+  users     User[]
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  content    String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  chatroom   ChatRoom @relation(fields: [chatroomId], references: [id], onDelete: Cascade)
+  chatroomId Int
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
